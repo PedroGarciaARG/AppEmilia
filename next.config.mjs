@@ -2,6 +2,7 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -11,8 +12,7 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/bebes-llorones-app' : '',
-  basePath: process.env.NODE_ENV === 'production' ? '/bebes-llorones-app' : '',
+  // Remover basePath y assetPrefix para simplificar
   distDir: 'out'
 }
 

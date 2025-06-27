@@ -1,19 +1,18 @@
 const CACHE_NAME = "bebes-llorones-v1.0.0"
-const BASE_PATH = "/bebes-llorones-app"
 
 const urlsToCache = [
-  `${BASE_PATH}/`,
-  `${BASE_PATH}/manifest.json`,
-  `${BASE_PATH}/images/bebe-abeja.png`,
-  `${BASE_PATH}/images/bebe-rana.png`,
-  `${BASE_PATH}/images/bebe-conejo.png`,
-  `${BASE_PATH}/images/bebe-astronauta.png`,
-  `${BASE_PATH}/images/bebe-raton.png`,
-  `${BASE_PATH}/images/bebe-elefante.png`,
-  `${BASE_PATH}/images/bebe-dalmata.png`,
-  `${BASE_PATH}/images/bebe-tiburon.png`,
-  `${BASE_PATH}/images/bebe-dinosaurio.png`,
-  `${BASE_PATH}/images/bebe-pollo.png`,
+  "/",
+  "/manifest.json",
+  "/images/bebe-abeja.png",
+  "/images/bebe-rana.png",
+  "/images/bebe-conejo.png",
+  "/images/bebe-astronauta.png",
+  "/images/bebe-raton.png",
+  "/images/bebe-elefante.png",
+  "/images/bebe-dalmata.png",
+  "/images/bebe-tiburon.png",
+  "/images/bebe-dinosaurio.png",
+  "/images/bebe-pollo.png",
 ]
 
 // Instalar Service Worker
