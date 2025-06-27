@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Progress } from "@/components/ui/progress"
+import { Star, Trophy, Target } from "lucide-react"
 
 interface LevelSystemProps {
   gameType:
@@ -205,4 +208,61 @@ export default function LevelSystem({ gameType, currentLevel, onLevelComplete }:
         <CardContent className="p-6">
           <div className="text-center mb-4">
             <div className="text-4xl mb-2 no-uppercase">{gameData.icon}</div>
-            <h3 className="text-2xl font-bold text\
+            <h3 className="text-2xl font-bold text-purple-600 mb-1">{gameData.name}</h3>
+            <Badge
+              className={`${difficultyColors[currentLevelData.difficulty as keyof typeof difficultyColors]} text-white text-lg px-4 py-1`}
+            >
+              {currentLevelData.difficulty}
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div className="bg-white/80 rounded-xl p-4 text-center border-2 border-purple-200">
+              <Trophy className="w-6 h-6 mx-auto mb-2 text-purple-600" />
+              <div className="text-2xl font-bold text-purple-600">{currentLevel}</div>
+              <div className="text-sm text-gray-600">NIVEL ACTUAL</div>
+            </div>
+            <div className="bg-white/80 rounded-xl p-4 text-center border-2 border-pink-200">
+              <Star className="w-6 h-6 mx-auto mb-2 text-pink-600" />
+              <div className="text-2xl font-bold text-pink-600">{currentLevelData.reward}</div>
+              <div className="text-sm text-gray-600">RECOMPENSA</div>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-lg font-bold text-purple-600">{currentLevelData.title}</span>
+              <span className="text-sm text-gray-600">
+                {completedTasks}/{currentLevelData.requirement}
+              </span>
+            </div>
+            <Progress value={progress} className="h-4 mb-2" />
+            <p className="text-center text-sm text-gray-600">{currentLevelData.description}</p>
+          </div>
+
+          {nextLevelData && (
+            <div className="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-xl p-4 border-2 border-yellow-300">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <Target className="w-5 h-5 text-orange-600" />
+                <span className="font-bold text-orange-600">PRÓXIMO NIVEL</span>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-bold text-orange-700">{nextLevelData.title}</div>
+                <div className="text-sm text-orange-600">{nextLevelData.description}</div>
+                <div className="text-xs text-orange-500 mt-1">RECOMPENSA: +{nextLevelData.reward} CORAZONES</div>
+              </div>
+            </div>
+          )}
+
+          {currentLevel >= 50 && (
+            <div className="bg-gradient-to-r from-gold-100 to-yellow-100 rounded-xl p-4 border-2 border-yellow-400 text-center">
+              <div className="text-4xl mb-2 no-uppercase">👑</div>
+              <div className="text-xl font-bold text-yellow-700">¡NIVEL MÁXIMO ALCANZADO!</div>
+              <div className="text-sm text-yellow-600">¡ERES UN VERDADERO MAESTRO!</div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
