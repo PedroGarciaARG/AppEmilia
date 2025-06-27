@@ -170,7 +170,7 @@ export default function KidsLearningApp() {
     }
   }
 
-  // PERSONAJES SOLO CON IMÁGENES DE BEBÉS LLORONES
+  // PERSONAJES CON TAMAÑOS CONTROLADOS
   const characters = [
     {
       image: "/images/bebe-abeja.png",
@@ -390,10 +390,10 @@ export default function KidsLearningApp() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100">
       <OfflineIndicator />
-      <div className="container mx-auto p-4">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="relative w-20 h-20 mx-auto mb-4">
+      <div className="container mx-auto p-4 max-w-6xl">
+        {/* Header - MÁS COMPACTO */}
+        <div className="text-center mb-6">
+          <div className="relative w-16 h-16 mx-auto mb-3">
             <Image
               src={userProfile.avatar || "/images/bebe-abeja.png"}
               alt="MI AVATAR"
@@ -401,38 +401,38 @@ export default function KidsLearningApp() {
               className="object-contain animate-bounce rounded-full border-4 border-pink-300"
             />
           </div>
-          <h1 className="text-4xl font-bold text-pink-600 mb-2">
+          <h1 className="text-3xl font-bold text-pink-600 mb-2">
             <span className="no-uppercase">💕</span> ¡HOLA {userProfile.name}! <span className="no-uppercase">💕</span>
           </h1>
-          <p className="text-xl text-purple-600 mb-4">¡BIENVENIDO AL MUNDO DE LOS BEBÉS LLORONES!</p>
+          <p className="text-lg text-purple-600 mb-3">¡BIENVENIDO AL MUNDO DE LOS BEBÉS LLORONES!</p>
           <div className="flex justify-center items-center gap-4 mb-4">
-            <Badge className="bg-pink-400 text-white text-lg px-4 py-2 border-2 border-pink-500">
+            <Badge className="bg-pink-400 text-white text-base px-3 py-1 border-2 border-pink-500">
               <Heart className="w-4 h-4 mr-1 fill-white" />
               {userProfile.stars} CORAZONES
             </Badge>
-            <Badge className="bg-purple-400 text-white text-lg px-4 py-2 border-2 border-purple-500">
+            <Badge className="bg-purple-400 text-white text-base px-3 py-1 border-2 border-purple-500">
               <Trophy className="w-4 h-4 mr-1" />
               NIVEL {userProfile.level}
             </Badge>
           </div>
         </div>
 
-        {/* Characters Grid - SOLO BEBÉS LLORONES */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+        {/* Characters Grid - TAMAÑO CONTROLADO */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 mb-6">
           {orderedCharacters.map((character, index) => (
             <Card
               key={index}
-              className={`${character.color} border-4 border-white shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 cursor-pointer overflow-hidden relative`}
+              className={`${character.color} border-3 border-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer overflow-hidden relative h-48`}
               onClick={() => setCurrentView(character.activity as any)}
             >
-              <CardContent className="p-6 text-center relative">
+              <CardContent className="p-3 text-center relative h-full flex flex-col justify-between">
                 {/* Número de orden */}
-                <div className="absolute top-2 left-2 bg-white/90 rounded-full w-8 h-8 flex items-center justify-center">
-                  <span className="text-sm font-bold text-gray-700">{character.order}</span>
+                <div className="absolute top-1 left-1 bg-white/90 rounded-full w-6 h-6 flex items-center justify-center">
+                  <span className="text-xs font-bold text-gray-700">{character.order}</span>
                 </div>
 
-                {/* SOLO Imagen del Bebé Llorón - MÁS GRANDE */}
-                <div className="relative w-24 h-24 mx-auto mb-4">
+                {/* Imagen del Bebé Llorón - TAMAÑO FIJO */}
+                <div className="relative w-16 h-16 mx-auto mb-2">
                   <Image
                     src={character.image || "/placeholder.svg"}
                     alt={`Bebé Llorón ${character.order}`}
@@ -441,20 +441,24 @@ export default function KidsLearningApp() {
                   />
                 </div>
 
-                {/* Descripción */}
-                <p className="text-white font-bold text-lg mb-3 drop-shadow-lg">{character.description}</p>
+                {/* Descripción - MÁS PEQUEÑA */}
+                <p className="text-white font-bold text-xs mb-2 drop-shadow-lg leading-tight">
+                  {character.description}
+                </p>
 
-                <Badge className="bg-white/20 text-white border border-white/30 mb-3 text-sm">
-                  NIVEL {character.level}
-                </Badge>
+                <div className="mt-auto">
+                  <Badge className="bg-white/20 text-white border border-white/30 mb-2 text-xs">
+                    NIVEL {character.level}
+                  </Badge>
 
-                <Button className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 rounded-full font-bold text-sm py-2 px-4">
-                  <Play className="w-4 h-4 mr-1" />
-                  ¡JUGAR!
-                </Button>
+                  <Button className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 rounded-full font-bold text-xs py-1 px-3 w-full">
+                    <Play className="w-3 h-3 mr-1" />
+                    ¡JUGAR!
+                  </Button>
+                </div>
 
                 <div className="absolute top-1 right-1">
-                  <div className="animate-pulse text-xl no-uppercase" data-emoji="true">
+                  <div className="animate-pulse text-sm no-uppercase" data-emoji="true">
                     💕
                   </div>
                 </div>
@@ -463,27 +467,27 @@ export default function KidsLearningApp() {
           ))}
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {/* Quick Actions - MÁS COMPACTO */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           <Button
             onClick={() => setCurrentView("store")}
-            className="bg-gradient-to-r from-green-400 to-emerald-400 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-6 rounded-2xl shadow-lg border-2 border-white"
+            className="bg-gradient-to-r from-green-400 to-emerald-400 hover:from-green-500 hover:to-emerald-500 text-white font-bold py-4 rounded-xl shadow-lg border-2 border-white"
           >
-            <ShoppingCart className="w-6 h-6 mr-2" />
+            <ShoppingCart className="w-5 h-5 mr-2" />
             TIENDA
           </Button>
           <Button
             onClick={() => setCurrentView("rewards")}
-            className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-6 rounded-2xl shadow-lg border-2 border-white"
+            className="bg-gradient-to-r from-pink-400 to-purple-400 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-4 rounded-xl shadow-lg border-2 border-white"
           >
-            <Trophy className="w-6 h-6 mr-2" />
+            <Trophy className="w-5 h-5 mr-2" />
             TESOROS
           </Button>
           <Button
             onClick={() => setCurrentView("settings")}
-            className="bg-gradient-to-r from-blue-400 to-teal-400 hover:from-blue-500 hover:to-teal-500 text-white font-bold py-6 rounded-2xl shadow-lg border-2 border-white"
+            className="bg-gradient-to-r from-blue-400 to-teal-400 hover:from-blue-500 hover:to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg border-2 border-white"
           >
-            <Settings className="w-6 h-6 mr-2" />
+            <Settings className="w-5 h-5 mr-2" />
             PERFIL
           </Button>
           <Button
@@ -499,24 +503,24 @@ export default function KidsLearningApp() {
                 speechSynthesis.speak(utterance)
               }
             }}
-            className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white font-bold py-6 rounded-2xl shadow-lg border-2 border-white"
+            className="bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white font-bold py-4 rounded-xl shadow-lg border-2 border-white"
           >
             <span className="no-uppercase">🔊</span> PROGRESO
           </Button>
         </div>
 
-        {/* Fun Animation */}
+        {/* Fun Animation - MÁS COMPACTO */}
         <div className="text-center">
-          <div className="animate-bounce text-6xl mb-2 no-uppercase" data-emoji="true">
+          <div className="animate-bounce text-4xl mb-2 no-uppercase" data-emoji="true">
             🍼
           </div>
-          <p className="text-pink-600 font-bold text-xl">¡SIGUE EL ORDEN PERFECTO DE APRENDIZAJE!</p>
-          <p className="text-purple-600 font-semibold text-lg mt-2">¡9 JUEGOS ORGANIZADOS PARA MÁXIMO APRENDIZAJE!</p>
+          <p className="text-pink-600 font-bold text-lg">¡SIGUE EL ORDEN PERFECTO DE APRENDIZAJE!</p>
+          <p className="text-purple-600 font-semibold text-base mt-1">¡9 JUEGOS ORGANIZADOS PARA MÁXIMO APRENDIZAJE!</p>
 
-          {/* Mostrar el orden de aprendizaje - SIN EMOJIS DE ANIMALES */}
-          <div className="mt-6 bg-white/80 rounded-2xl p-4 border-2 border-pink-300">
-            <h3 className="text-lg font-bold text-pink-600 mb-3">🎯 ORDEN DE APRENDIZAJE:</h3>
-            <div className="grid grid-cols-3 gap-2 text-sm">
+          {/* Mostrar el orden de aprendizaje - MÁS COMPACTO */}
+          <div className="mt-4 bg-white/80 rounded-xl p-3 border-2 border-pink-300">
+            <h3 className="text-base font-bold text-pink-600 mb-2">🎯 ORDEN DE APRENDIZAJE:</h3>
+            <div className="grid grid-cols-3 gap-1 text-xs">
               <div className="flex items-center gap-1">
                 <span className="no-uppercase">1️⃣</span> LETRAS
               </div>
@@ -547,14 +551,14 @@ export default function KidsLearningApp() {
             </div>
           </div>
 
-          <div className="flex justify-center gap-2 mt-4">
-            <span className="animate-pulse text-2xl no-uppercase" data-emoji="true">
+          <div className="flex justify-center gap-2 mt-3">
+            <span className="animate-pulse text-xl no-uppercase" data-emoji="true">
               💕
             </span>
-            <span className="animate-pulse text-2xl no-uppercase" data-emoji="true" style={{ animationDelay: "0.5s" }}>
+            <span className="animate-pulse text-xl no-uppercase" data-emoji="true" style={{ animationDelay: "0.5s" }}>
               💕
             </span>
-            <span className="animate-pulse text-2xl no-uppercase" data-emoji="true" style={{ animationDelay: "1s" }}>
+            <span className="animate-pulse text-xl no-uppercase" data-emoji="true" style={{ animationDelay: "1s" }}>
               💕
             </span>
           </div>
