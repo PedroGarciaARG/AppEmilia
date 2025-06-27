@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aplicación educativa de los Bebés Llorones para niños de 3-8 años. Aprende letras, palabras, cuentos y canciones.">
+    <meta name="keywords" content="bebés llorones, educación, niños, juegos, aprender, letras, palabras">
+    <meta name="author" content="Bebés Llorones Educational Team">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Bebés Llorones - Aprende Jugando">
+    <meta property="og:description" content="Aplicación educativa para niños con los adorables Bebés Llorones">
+    <meta property="og:image" content="https://tu-usuario.github.io/bebes-llorones-app/og-image.png">
+    <meta property="og:url" content="https://tu-usuario.github.io/bebes-llorones-app/">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bebés Llorones - Aprende Jugando">
+    <meta name="twitter:description" content="Aplicación educativa para niños con los adorables Bebés Llorones">
+    <meta name="twitter:image" content="https://tu-usuario.github.io/bebes-llorones-app/og-image.png">
+    
+    <!-- PWA -->
+    <meta name="theme-color" content="#ec4899">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Bebés Llorones">
+    
+    <title>Bebés Llorones - Aprende Jugando 👶💕</title>
+    <link rel="icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+            min-height: 100vh;
+        }
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .spinner {
+            font-size: 4rem;
+            animation: bounce 1s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-30px); }
+            60% { transform: translateY(-15px); }
+        }
+        .loading-text {
+            color: #ec4899;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .loading-subtitle {
+            color: #8b5cf6;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="__next">
+        <div class="loading">
+            <div class="spinner">👶💕</div>
+            <div class="loading-text">Cargando Bebés Llorones...</div>
+            <div class="loading-subtitle">¡Preparando la diversión!</div>
+        </div>
+    </div>
+    
+    <script>
+        // Registrar Service Worker para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('SW registrado exitosamente');
+                    })
+                    .catch(function(registrationError) {
+                        console.log('SW registro falló');
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

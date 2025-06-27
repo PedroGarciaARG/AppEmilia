@@ -1,0 +1,41 @@
+{
+  "name": "Bebés Llorones - Aprende Jugando",
+  "short_name": "Bebés Llorones",
+  "description": "Aplicación educativa para niños con los adorables Bebés Llorones",
+  "start_url": "/bebes-llorones-app/",
+  "display": "standalone",
+  "background_color": "#fce7f3",
+  "theme_color": "#ec4899",
+  "orientation": "portrait",
+  "scope": "/bebes-llorones-app/",
+  "lang": "es",
+  "categories": ["education", "kids", "games"],
+  "icons": [
+    {
+      "src": "/bebes-llorones-app/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/bebes-llorones-app/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Jugar con Bebé Abeja",
+      "short_name": "Letras",
+      "description": "Aprende letras con Bebé Abeja",
+      "url": "/bebes-llorones-app/?game=letters",
+      "icons": [
+        {
+          "src": "/bebes-llorones-app/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

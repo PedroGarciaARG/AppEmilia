@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instalar Bebés Llorones App</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fce7f3, #e0e7ff);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #ec4899;
+            margin-bottom: 10px;
+        }
+        .steps {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 10px;
+            background: #fce7f3;
+            border-radius: 10px;
+            border-left: 4px solid #ec4899;
+        }
+        .button {
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .android-steps, .ios-steps {
+            display: none;
+        }
+        .android-steps.show, .ios-steps.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">👶💕</div>
+        <h1>Instalar Bebés Llorones</h1>
+        <p>¡Instala la app en tu dispositivo para jugar sin conexión!</p>
+        
+        <div class="steps">
+            <button class="button" onclick="showAndroidSteps()">📱 Android</button>
+            <button class="button" onclick="showIOSSteps()">🍎 iPhone/iPad</button>
+        </div>
+
+        <div id="android-steps" class="android-steps">
+            <h3>📱 Para Android:</h3>
+            <div class="step">
+                <strong>1.</strong> Abre Chrome en tu teléfono
+            </div>
+            <div class="step">
+                <strong>2.</strong> Ve a la aplicación web
+            </div>
+            <div class="step">
+                <strong>3.</strong> Toca el menú (⋮) y selecciona "Instalar app"
+            </div>
+            <div class="step">
+                <strong>4.</strong> Confirma la instalación
+            </div>
+            <div class="step">
+                <strong>5.</strong> ¡La app aparecerá en tu pantalla de inicio!
+            </div>
+        </div>
+
+        <div id="ios-steps" class="ios-steps">
+            <h3>🍎 Para iPhone/iPad:</h3>
+            <div class="step">
+                <strong>1.</strong> Abre Safari (no Chrome)
+            </div>
+            <div class="step">
+                <strong>2.</strong> Ve a la aplicación web
+            </div>
+            <div class="step">
+                <strong>3.</strong> Toca el botón de compartir (📤)
+            </div>
+            <div class="step">
+                <strong>4.</strong> Selecciona "Añadir a pantalla de inicio"
+            </div>
+            <div class="step">
+                <strong>5.</strong> Toca "Añadir" para confirmar
+            </div>
+        </div>
+
+        <a href="/" class="button">🚀 Abrir App</a>
+        
+        <div style="margin-top: 30px; font-size: 12px; color: #666;">
+            <p>💡 <strong>Ventajas de instalar:</strong></p>
+            <p>✅ Funciona sin internet<br>
+            ✅ Acceso rápido desde pantalla de inicio<br>
+            ✅ Experiencia como app nativa<br>
+            ✅ Sin anuncios ni distracciones</p>
+        </div>
+    </div>
+
+    <script>
+        function showAndroidSteps() {
+            document.getElementById('android-steps').classList.add('show');
+            document.getElementById('ios-steps').classList.remove('show');
+        }
+        
+        function showIOSSteps() {
+            document.getElementById('ios-steps').classList.add('show');
+            document.getElementById('android-steps').classList.remove('show');
+        }
+
+        // Auto-detectar dispositivo
+        const isAndroid = /Android/i.test(navigator.userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        
+        if (isAndroid) {
+            showAndroidSteps();
+        } else if (isIOS) {
+            showIOSSteps();
+        }
+    </script>
+</body>
+</html>
