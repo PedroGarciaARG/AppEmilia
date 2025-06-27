@@ -65,49 +65,65 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Comic Sans MS", "Trebuchet MS", cursive, sans-serif;
+    line-height: 1.6;
   }
 }
 
-/* CONVERTIR TODO EL TEXTO A MAYÚSCULAS PARA AYUDAR A LOS NIÑOS A LEER */
-* {
-  text-transform: uppercase !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.05em !important;
+/* ESTILOS PARA NIÑOS - TEXTO EN MAYÚSCULAS SOLO DONDE SEA APROPIADO */
+.kids-text {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
 /* EXCEPCIONES PARA ELEMENTOS QUE NO DEBEN SER MAYÚSCULAS */
 .no-uppercase,
 .emoji,
-[data-emoji="true"] {
+[data-emoji="true"],
+.normal-case {
   text-transform: none !important;
 }
 
 /* MEJORAR LEGIBILIDAD PARA NIÑOS */
-body {
-  font-family: "Comic Sans MS", "Trebuchet MS", cursive, sans-serif !important;
-  line-height: 1.6 !important;
-}
-
-/* BOTONES MÁS GRANDES Y LEGIBLES */
-button {
-  font-size: 1.1em !important;
-  padding: 0.75rem 1.5rem !important;
-  border-radius: 1rem !important;
-}
-
-/* INPUTS MÁS GRANDES */
-input {
-  font-size: 1.2em !important;
-  padding: 0.75rem !important;
-}
-
-/* TÍTULOS MÁS DESTACADOS */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-weight: 800 !important;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1) !important;
+  font-weight: 800;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* BOTONES MÁS GRANDES Y LEGIBLES */
+button {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* INPUTS MÁS GRANDES */
+input {
+  font-size: 1.1em;
+}
+
+/* TEXTO PRINCIPAL EN MAYÚSCULAS */
+p,
+span,
+div {
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* EXCEPCIONES ESPECÍFICAS */
+.normal-case,
+.normal-case * {
+  text-transform: none !important;
+  font-weight: normal !important;
+  letter-spacing: normal !important;
 }

@@ -19,23 +19,10 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://bebes-llorones-app.vercel.app"),
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     title: "Bebés Llorones - Aprende Jugando",
     description: "Aplicación educativa para niños con los adorables Bebés Llorones",
-    url: "https://bebes-llorones-app.vercel.app",
     siteName: "Bebés Llorones App",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Bebés Llorones - Aprende Jugando",
-      },
-    ],
     locale: "es_ES",
     type: "website",
   },
@@ -43,7 +30,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Bebés Llorones - Aprende Jugando",
     description: "Aplicación educativa para niños con los adorables Bebés Llorones",
-    images: ["/og-image.png"],
   },
   appleWebApp: {
     capable: true,
@@ -78,7 +64,7 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/placeholder.svg?height=192&width=192" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Bebés Llorones" />
@@ -87,7 +73,7 @@ export default function RootLayout({
         <meta name="msapplication-tap-highlight" content="no" />
       </head>
       <body className={inter.className}>
-        {children}
+        <div className="min-h-screen">{children}</div>
         <PWAInstaller />
       </body>
     </html>

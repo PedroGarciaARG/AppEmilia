@@ -33,12 +33,12 @@ interface UserProfile {
     letters: number
     syllables: number
     words: number
-    stories: number
-    songs: number
     farmLetters: number
     syllableTrain: number
     soundForest: number
     storyCreator: number
+    stories: number
+    songs: number
   }
 }
 
@@ -48,12 +48,12 @@ export default function KidsLearningApp() {
     | "letters"
     | "syllables"
     | "words"
-    | "stories"
-    | "songs"
     | "farmLetters"
     | "syllableTrain"
     | "soundForest"
     | "storyCreator"
+    | "stories"
+    | "songs"
     | "settings"
     | "rewards"
     | "store"
@@ -70,12 +70,12 @@ export default function KidsLearningApp() {
       letters: 1,
       syllables: 1,
       words: 1,
-      stories: 1,
-      songs: 1,
       farmLetters: 1,
       syllableTrain: 1,
       soundForest: 1,
       storyCreator: 1,
+      stories: 1,
+      songs: 1,
     },
   })
 
@@ -91,12 +91,12 @@ export default function KidsLearningApp() {
           letters: 1,
           syllables: 1,
           words: 1,
-          stories: 1,
-          songs: 1,
           farmLetters: 1,
           syllableTrain: 1,
           soundForest: 1,
           storyCreator: 1,
+          stories: 1,
+          songs: 1,
         },
       })
     }
@@ -170,89 +170,84 @@ export default function KidsLearningApp() {
     }
   }
 
+  // PERSONAJES SOLO CON IMÁGENES DE BEBÉS LLORONES
   const characters = [
     {
-      name: "BEBÉ ABEJA",
       image: "/images/bebe-abeja.png",
       color: "bg-gradient-to-br from-yellow-300 to-orange-400",
       activity: "letters",
-      description: "¡APRENDE LAS LETRAS CON BEBÉ ABEJA!",
+      description: "¡APRENDE LAS LETRAS!",
       level: userProfile.gameLevels.letters,
-      emoji: "🐝",
+      order: 1,
     },
     {
-      name: "BEBÉ ELEFANTE",
       image: "/images/bebe-elefante.png",
       color: "bg-gradient-to-br from-gray-400 to-blue-500",
       activity: "syllables",
-      description: "¡UNE SÍLABAS CON BEBÉ ELEFANTE!",
+      description: "¡UNE SÍLABAS!",
       level: userProfile.gameLevels.syllables,
-      emoji: "🐘",
+      order: 2,
     },
     {
-      name: "BEBÉ RANA",
       image: "/images/bebe-rana.png",
       color: "bg-gradient-to-br from-green-300 to-green-500",
       activity: "words",
-      description: "BEBÉ RANA TE AYUDA A FORMAR PALABRAS",
+      description: "¡FORMA PALABRAS!",
       level: userProfile.gameLevels.words,
-      emoji: "🐸",
+      order: 3,
     },
     {
-      name: "BEBÉ CONEJO",
-      image: "/images/bebe-conejo.png",
-      color: "bg-gradient-to-br from-pink-300 to-pink-500",
-      activity: "stories",
-      description: "ESCUCHA CUENTOS MÁGICOS CON BEBÉ CONEJO",
-      level: userProfile.gameLevels.stories,
-      emoji: "🐰",
-    },
-    {
-      name: "BEBÉ ASTRONAUTA",
-      image: "/images/bebe-astronauta.png",
-      color: "bg-gradient-to-br from-blue-400 to-purple-500",
-      activity: "songs",
-      description: "¡CANTA CANCIONES ESPACIALES!",
-      level: userProfile.gameLevels.songs,
-      emoji: "🚀",
-    },
-    {
-      name: "BEBÉ RATÓN",
       image: "/images/bebe-raton.png",
       color: "bg-gradient-to-br from-orange-300 to-yellow-400",
       activity: "farmLetters",
-      description: "¡GRANJA DE LETRAS CON BEBÉ RATÓN!",
+      description: "¡GRANJA DE LETRAS!",
       level: userProfile.gameLevels.farmLetters,
-      emoji: "🐭",
+      order: 4,
     },
     {
-      name: "BEBÉ TIBURÓN",
       image: "/images/bebe-tiburon.png",
       color: "bg-gradient-to-br from-blue-400 to-cyan-500",
       activity: "syllableTrain",
-      description: "¡CIUDAD DE SÍLABAS CON BEBÉ TIBURÓN!",
+      description: "¡CIUDAD DE SÍLABAS!",
       level: userProfile.gameLevels.syllableTrain,
-      emoji: "🦈",
+      order: 5,
     },
     {
-      name: "BEBÉ DINOSAURIO",
       image: "/images/bebe-dinosaurio.png",
       color: "bg-gradient-to-br from-green-400 to-emerald-500",
       activity: "soundForest",
-      description: "¡BOSQUE DE SONIDOS CON BEBÉ DINOSAURIO!",
+      description: "¡BOSQUE DE SONIDOS!",
       level: userProfile.gameLevels.soundForest,
-      emoji: "🦕",
+      order: 6,
     },
     {
-      name: "BEBÉ POLLO",
       image: "/images/bebe-pollo.png",
       color: "bg-gradient-to-br from-yellow-400 to-orange-500",
       activity: "storyCreator",
-      description: "¡CASA DE CUENTOS CON BEBÉ POLLO!",
+      description: "¡CASA DE CUENTOS!",
       level: userProfile.gameLevels.storyCreator,
-      emoji: "🐥",
+      order: 7,
+    },
+    {
+      image: "/images/bebe-conejo.png",
+      color: "bg-gradient-to-br from-pink-300 to-pink-500",
+      activity: "stories",
+      description: "¡CUENTOS NARRADOS!",
+      level: userProfile.gameLevels.stories,
+      order: 8,
+    },
+    {
+      image: "/images/bebe-astronauta.png",
+      color: "bg-gradient-to-br from-blue-400 to-purple-500",
+      activity: "songs",
+      description: "¡CANCIONES ESPACIALES!",
+      level: userProfile.gameLevels.songs,
+      order: 9,
     },
   ]
+
+  // Ordenar personajes según el nuevo orden
+  const orderedCharacters = characters.sort((a, b) => a.order - b.order)
 
   if (currentView !== "home") {
     return (
@@ -304,26 +299,6 @@ export default function KidsLearningApp() {
                 onLevelComplete={(newLevel, reward) => handleLevelComplete("words", newLevel, reward)}
               />
               <WordGame language={userProfile.language} onReward={addStars} />
-            </>
-          )}
-          {currentView === "stories" && (
-            <>
-              <LevelSystem
-                gameType="stories"
-                currentLevel={userProfile.gameLevels.stories}
-                onLevelComplete={(newLevel, reward) => handleLevelComplete("stories", newLevel, reward)}
-              />
-              <StoryTime language={userProfile.language} onReward={addStars} />
-            </>
-          )}
-          {currentView === "songs" && (
-            <>
-              <LevelSystem
-                gameType="songs"
-                currentLevel={userProfile.gameLevels.songs}
-                onLevelComplete={(newLevel, reward) => handleLevelComplete("songs", newLevel, reward)}
-              />
-              <SongTime language={userProfile.language} onReward={addStars} />
             </>
           )}
           {currentView === "farmLetters" && (
@@ -382,6 +357,26 @@ export default function KidsLearningApp() {
               />
             </>
           )}
+          {currentView === "stories" && (
+            <>
+              <LevelSystem
+                gameType="stories"
+                currentLevel={userProfile.gameLevels.stories}
+                onLevelComplete={(newLevel, reward) => handleLevelComplete("stories", newLevel, reward)}
+              />
+              <StoryTime language={userProfile.language} onReward={addStars} />
+            </>
+          )}
+          {currentView === "songs" && (
+            <>
+              <LevelSystem
+                gameType="songs"
+                currentLevel={userProfile.gameLevels.songs}
+                onLevelComplete={(newLevel, reward) => handleLevelComplete("songs", newLevel, reward)}
+              />
+              <SongTime language={userProfile.language} onReward={addStars} />
+            </>
+          )}
           {currentView === "settings" && <SettingsPanel profile={userProfile} onSave={saveProfile} />}
           {currentView === "rewards" && <RewardsPanel profile={userProfile} />}
           {currentView === "store" && (
@@ -400,7 +395,7 @@ export default function KidsLearningApp() {
         <div className="text-center mb-8">
           <div className="relative w-20 h-20 mx-auto mb-4">
             <Image
-              src={userProfile.avatar || "/placeholder.svg"}
+              src={userProfile.avatar || "/images/bebe-abeja.png"}
               alt="MI AVATAR"
               fill
               className="object-contain animate-bounce rounded-full border-4 border-pink-300"
@@ -422,34 +417,44 @@ export default function KidsLearningApp() {
           </div>
         </div>
 
-        {/* Characters Grid */}
+        {/* Characters Grid - SOLO BEBÉS LLORONES */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          {characters.map((character, index) => (
+          {orderedCharacters.map((character, index) => (
             <Card
               key={index}
-              className={`${character.color} border-4 border-white shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 cursor-pointer overflow-hidden`}
+              className={`${character.color} border-4 border-white shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105 cursor-pointer overflow-hidden relative`}
               onClick={() => setCurrentView(character.activity as any)}
             >
-              <CardContent className="p-4 text-center relative">
-                <div className="relative w-16 h-16 mx-auto mb-3">
+              <CardContent className="p-6 text-center relative">
+                {/* Número de orden */}
+                <div className="absolute top-2 left-2 bg-white/90 rounded-full w-8 h-8 flex items-center justify-center">
+                  <span className="text-sm font-bold text-gray-700">{character.order}</span>
+                </div>
+
+                {/* SOLO Imagen del Bebé Llorón - MÁS GRANDE */}
+                <div className="relative w-24 h-24 mx-auto mb-4">
                   <Image
                     src={character.image || "/placeholder.svg"}
-                    alt={character.name}
+                    alt={`Bebé Llorón ${character.order}`}
                     fill
                     className="object-contain animate-bounce"
                   />
                 </div>
-                <h3 className="text-white font-bold text-sm mb-2 drop-shadow-lg">{character.name}</h3>
-                <p className="text-white/90 text-xs mb-2 drop-shadow">{character.description}</p>
-                <Badge className="bg-white/20 text-white border border-white/30 mb-2 text-xs">
+
+                {/* Descripción */}
+                <p className="text-white font-bold text-lg mb-3 drop-shadow-lg">{character.description}</p>
+
+                <Badge className="bg-white/20 text-white border border-white/30 mb-3 text-sm">
                   NIVEL {character.level}
                 </Badge>
-                <Button className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 rounded-full font-bold text-xs py-1 px-3">
-                  <Play className="w-3 h-3 mr-1" />
+
+                <Button className="bg-white/20 hover:bg-white/30 text-white border-2 border-white/50 rounded-full font-bold text-sm py-2 px-4">
+                  <Play className="w-4 h-4 mr-1" />
                   ¡JUGAR!
                 </Button>
+
                 <div className="absolute top-1 right-1">
-                  <div className="animate-pulse text-lg no-uppercase" data-emoji="true">
+                  <div className="animate-pulse text-xl no-uppercase" data-emoji="true">
                     💕
                   </div>
                 </div>
@@ -486,7 +491,7 @@ export default function KidsLearningApp() {
               const totalLevel = Object.values(userProfile.gameLevels).reduce((a, b) => a + b, 0)
               if ("speechSynthesis" in window) {
                 const utterance = new SpeechSynthesisUtterance(
-                  `¡TIENES ${userProfile.stars} CORAZONES Y ESTÁS EN EL NIVEL ${userProfile.level}! ¡AHORA HAY 9 JUEGOS DIFERENTES PARA APRENDER!`,
+                  `¡TIENES ${userProfile.stars} CORAZONES Y ESTÁS EN EL NIVEL ${userProfile.level}! ¡AHORA HAY 9 JUEGOS DIFERENTES PARA APRENDER EN EL ORDEN PERFECTO!`,
                 )
                 utterance.lang = "es-ES"
                 utterance.rate = 0.8
@@ -505,8 +510,43 @@ export default function KidsLearningApp() {
           <div className="animate-bounce text-6xl mb-2 no-uppercase" data-emoji="true">
             🍼
           </div>
-          <p className="text-pink-600 font-bold text-xl">¡ELIGE TU BEBÉ FAVORITO PARA EMPEZAR!</p>
-          <p className="text-purple-600 font-semibold text-lg mt-2">¡AHORA CON 9 JUEGOS Y 450 NIVELES!</p>
+          <p className="text-pink-600 font-bold text-xl">¡SIGUE EL ORDEN PERFECTO DE APRENDIZAJE!</p>
+          <p className="text-purple-600 font-semibold text-lg mt-2">¡9 JUEGOS ORGANIZADOS PARA MÁXIMO APRENDIZAJE!</p>
+
+          {/* Mostrar el orden de aprendizaje - SIN EMOJIS DE ANIMALES */}
+          <div className="mt-6 bg-white/80 rounded-2xl p-4 border-2 border-pink-300">
+            <h3 className="text-lg font-bold text-pink-600 mb-3">🎯 ORDEN DE APRENDIZAJE:</h3>
+            <div className="grid grid-cols-3 gap-2 text-sm">
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">1️⃣</span> LETRAS
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">2️⃣</span> SÍLABAS
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">3️⃣</span> PALABRAS
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">4️⃣</span> GRANJA
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">5️⃣</span> CIUDAD
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">6️⃣</span> BOSQUE
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">7️⃣</span> CREAR
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">8️⃣</span> CUENTOS
+              </div>
+              <div className="flex items-center gap-1">
+                <span className="no-uppercase">9️⃣</span> CANCIONES
+              </div>
+            </div>
+          </div>
+
           <div className="flex justify-center gap-2 mt-4">
             <span className="animate-pulse text-2xl no-uppercase" data-emoji="true">
               💕
