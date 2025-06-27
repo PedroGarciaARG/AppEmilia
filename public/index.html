@@ -10,15 +10,12 @@
     <!-- Open Graph -->
     <meta property="og:title" content="Bebés Llorones - Aprende Jugando">
     <meta property="og:description" content="Aplicación educativa para niños con los adorables Bebés Llorones">
-    <meta property="og:image" content="https://tu-usuario.github.io/bebes-llorones-app/og-image.png">
-    <meta property="og:url" content="https://tu-usuario.github.io/bebes-llorones-app/">
     <meta property="og:type" content="website">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Bebés Llorones - Aprende Jugando">
     <meta name="twitter:description" content="Aplicación educativa para niños con los adorables Bebés Llorones">
-    <meta name="twitter:image" content="https://tu-usuario.github.io/bebes-llorones-app/og-image.png">
     
     <!-- PWA -->
     <meta name="theme-color" content="#ec4899">
@@ -29,7 +26,7 @@
     <title>Bebés Llorones - Aprende Jugando 👶💕</title>
     <link rel="icon" href="/favicon.ico">
     <link rel="manifest" href="/manifest.json">
-    <link rel="apple-touch-icon" href="/icon-192x192.png">
+    <link rel="apple-touch-icon" href="/placeholder.svg?height=192&width=192">
     
     <style>
         body {
@@ -61,11 +58,13 @@
             font-size: 1.5rem;
             font-weight: bold;
             margin-top: 20px;
+            text-transform: uppercase;
         }
         .loading-subtitle {
             color: #8b5cf6;
             font-size: 1rem;
             margin-top: 10px;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -91,6 +90,13 @@
                     });
             });
         }
+        
+        // Redireccionar a la app después de 2 segundos
+        setTimeout(() => {
+            if (window.location.pathname === '/index.html') {
+                window.location.href = '/';
+            }
+        }, 2000);
     </script>
 </body>
 </html>

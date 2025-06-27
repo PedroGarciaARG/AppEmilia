@@ -10,10 +10,17 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true
+    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
-  // Remover basePath y assetPrefix para simplificar
-  distDir: 'out'
+  distDir: 'out',
+  // Asegurar que los assets se sirvan correctamente
+  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
 }
 
 export default nextConfig
