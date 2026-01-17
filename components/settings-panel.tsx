@@ -1,225 +1,301 @@
 "use client"
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react"
+import type React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Save, User, Globe, Heart } from "lucide-react"
-import Image from "next/image"
-
-interface UserProfile {
-  name: string
-  age: number
-  language: "es" | "en" | "both"
-  avatar: string
-  stars: number
-  level: number
-}
+import { Settings, Save, Upload } from "lucide-react"
+import type { Purchase, Sale } from "@/lib/types"
 
 interface SettingsPanelProps {
-  profile: UserProfile
-  onSave: (profile: UserProfile) => void
+  cardPrices: { [key: number]: number }
+  onUpdatePrices: (prices: { [key: number]: number }) => void
+  onImportData: (purchases: Purchase[], sales: Sale[]) => void
 }
 
-export default function SettingsPanel({ profile, onSave }: SettingsPanelProps) {
-  const [tempProfile, setTempProfile] = useState(profile)
+export function SettingsPanel({ cardPrices, onUpdatePrices, onImportData }: SettingsPanelProps) {
+  const [price400, setPrice400] = useState(cardPrices[400]?.toString() || "5.17")
+  const [price800, setPrice800] = useState(cardPrices[800]?.toString() || "10.34")
+  const [price1000, setPrice1000] = useState(cardPrices[1000]?.toString() || "10")
+  const [importError, setImportError] = useState<string | null>(null)
+  const [importSuccess, setImportSuccess] = useState(false)
 
-  const avatars = ["💕", "👶", "🍼", "🌟", "🎈", "🦄", "🌈", "⭐", "💖", "🎀"]
+  useEffect(() => {
+    setPrice400(cardPrices[400]?.toString() || "5.17")
+    setPrice800(cardPrices[800]?.toString() || "10.34")
+    setPrice1000(cardPrices[1000]?.toString() || "10")
+  }, [cardPrices])
 
-  const handleSave = () => {
-    onSave(tempProfile)
-    alert("¡Configuración guardada! ¡Buaaa de felicidad!")
+  const handleSavePrices = () => {
+    const newPrices = {
+      400: Number.parseFloat(price400) || 5.17,
+      800: Number.parseFloat(price800) || 10.34,
+      1000: Number.parseFloat(price1000) || 10,
+    }
+    onUpdatePrices(newPrices)
+    alert("Precios actualizados correctamente")
+  }
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setImportError(null)
+    setImportSuccess(false)
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result as string
+        const lines = text.split("\n").filter((line) => line.trim())
+
+        const purchases: Purchase[] = []
+        const sales: Sale[] = []
+
+        let section = ""
+
+        for (const line of lines) {
+          const trimmed = line.trim().toUpperCase()
+
+          if (trimmed === "COMPRAS" || trimmed.includes("COMPRAS")) {
+            section = "compras"
+            continue
+          }
+          if (trimmed === "VENTAS" || trimmed.includes("VENTAS")) {
+            section = "ventas"
+            continue
+          }
+          if (trimmed === "PÉRDIDAS" || trimmed.includes("PERDIDAS") || trimmed.includes("PÉRDIDAS")) {
+            section = "perdidas"
+            continue
+          }
+          if (trimmed === "RESUMEN" || trimmed.includes("RESUMEN")) {
+            section = "resumen"
+            continue
+          }
+
+          // Skip headers
+          if (
+            trimmed.includes("TIPO") ||
+            trimmed.includes("FECHA") ||
+            trimmed.includes("PRECIO") ||
+            trimmed.includes("INVERSIÓN") ||
+            trimmed.includes("INGRESOS") ||
+            trimmed.includes("GANANCIA") ||
+            trimmed.includes("TARJETAS")
+          ) {
+            continue
+          }
+
+          const parts = line.split(",").map((p) => p.trim())
+
+          if (section === "compras" && parts.length >= 5) {
+            const cardType = parts[0].includes("1000") ? 1000 : parts[0].includes("800") ? 800 : 400
+            const date = parseDate(parts[1])
+            const priceUSD = Number.parseFloat(parts[2]) || (cardType === 400 ? 5.17 : cardType === 800 ? 10.34 : 10)
+            const rate = Number.parseFloat(parts[3]) || 1000
+            const costARS = Number.parseFloat(parts[4]) || priceUSD * rate
+
+            if (date) {
+              purchases.push({
+                id: crypto.randomUUID(),
+                cardType,
+                priceUSD,
+                exchangeRate: rate,
+                costARS,
+                purchaseDate: date,
+                createdAt: new Date().toISOString(),
+              })
+            }
+          }
+
+          if (section === "ventas" && parts.length >= 5) {
+            const cardType = parts[0].includes("1000") ? 1000 : parts[0].includes("800") ? 800 : 400
+            const date = parseDate(parts[1])
+            const platform = parts[2].toLowerCase().includes("ml") ? "mercadolibre" : "direct"
+            const cardCode = parts[3] || undefined
+            const salePrice = Number.parseFloat(parts[4]) || 0
+            const commission = Number.parseFloat(parts[5]) || 0
+            const netAmount = Number.parseFloat(parts[6]) || salePrice - commission
+
+            if (date) {
+              sales.push({
+                id: crypto.randomUUID(),
+                cardType,
+                cardCode,
+                salePrice,
+                commission,
+                netAmount,
+                saleDate: date,
+                platform,
+                quantity: 1,
+                createdAt: new Date().toISOString(),
+              })
+            }
+          }
+
+          if (section === "perdidas" && parts.length >= 2) {
+            const cardType = parts[0].includes("1000") ? 1000 : parts[0].includes("800") ? 800 : 400
+            const date = parseDate(parts[1])
+            const cardCode = parts[2] || undefined
+
+            if (date) {
+              sales.push({
+                id: crypto.randomUUID(),
+                cardType,
+                cardCode,
+                salePrice: 0,
+                commission: 0,
+                netAmount: 0,
+                saleDate: date,
+                platform: "lost",
+                quantity: 1,
+                createdAt: new Date().toISOString(),
+              })
+            }
+          }
+        }
+
+        if (purchases.length === 0 && sales.length === 0) {
+          setImportError("No se encontraron datos válidos en el archivo. Asegúrate de que el formato sea correcto.")
+          return
+        }
+
+        onImportData(purchases, sales)
+        setImportSuccess(true)
+        setTimeout(() => setImportSuccess(false), 3000)
+      } catch (error) {
+        console.error("Import error:", error)
+        setImportError("Error al procesar el archivo. Verifica el formato.")
+      }
+    }
+
+    reader.readAsText(file)
+    e.target.value = ""
+  }
+
+  const parseDate = (dateStr: string): string | null => {
+    if (!dateStr) return null
+
+    // Try different date formats
+    // Format: DD/MM/YYYY
+    let match = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/)
+    if (match) {
+      const [, day, month, year] = match
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`
+    }
+
+    // Format: YYYY-MM-DD
+    match = dateStr.match(/(\d{4})-(\d{2})-(\d{2})/)
+    if (match) {
+      return dateStr
+    }
+
+    // Format: DD-MM-YYYY
+    match = dateStr.match(/(\d{1,2})-(\d{1,2})-(\d{4})/)
+    if (match) {
+      const [, day, month, year] = match
+      return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`
+    }
+
+    return null
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="text-center mb-6">
-        <div className="flex justify-center gap-4 mb-4">
-          <div className="relative w-16 h-16">
-            <Image src="/images/bebe-conejo.png" alt="Bebé Conejo" fill className="object-contain" />
-          </div>
-          <div className="relative w-16 h-16">
-            <Image src="/images/bebe-abeja.png" alt="Bebé Abeja" fill className="object-contain" />
-          </div>
-          <div className="relative w-16 h-16">
-            <Image src="/images/bebe-rana.png" alt="Bebé Rana" fill className="object-contain" />
-          </div>
-        </div>
-        <h2 className="text-3xl font-bold text-pink-600 mb-2">⚙️ Mi Perfil de Bebé Llorón</h2>
-        <p className="text-gray-600">Personaliza tu aventura con los Bebés Llorones</p>
-      </div>
-
-      <div className="space-y-6">
-        {/* Profile Settings */}
-        <Card className="bg-gradient-to-br from-pink-50 to-purple-50 shadow-xl border-4 border-pink-300">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-pink-600">
-              <User className="w-5 h-5" />
-              Información del Bebé
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="name" className="text-lg font-semibold text-pink-700">
-                Nombre del Bebé
+    <Card>
+      <CardHeader className="px-4 sm:px-6 pt-4 sm:pt-6 pb-2 sm:pb-4">
+        <CardTitle className="text-lg sm:text-xl flex items-center gap-2">
+          <Settings className="h-5 w-5" />
+          Configuración
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6 space-y-6">
+        {/* Price Editor */}
+        <div className="space-y-4">
+          <h3 className="font-medium text-sm text-muted-foreground">Precios de Gift Cards (USD)</h3>
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+            <div className="space-y-2">
+              <Label htmlFor="price400" className="text-sm">
+                400 Robux (USD)
               </Label>
               <Input
-                id="name"
-                value={tempProfile.name}
-                onChange={(e) => setTempProfile({ ...tempProfile, name: e.target.value })}
-                className="text-lg p-3 rounded-xl border-2 border-pink-300 focus:border-pink-500"
-                placeholder="Mi nombre de bebé"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="age" className="text-lg font-semibold text-pink-700">
-                Edad
-              </Label>
-              <Input
-                id="age"
+                id="price400"
                 type="number"
-                min="3"
-                max="10"
-                value={tempProfile.age}
-                onChange={(e) => setTempProfile({ ...tempProfile, age: Number.parseInt(e.target.value) || 6 })}
-                className="text-lg p-3 rounded-xl border-2 border-pink-300 focus:border-pink-500"
+                step="0.01"
+                value={price400}
+                onChange={(e) => setPrice400(e.target.value)}
+                className="h-10 sm:h-9"
               />
             </div>
-
-            <div>
-              <Label className="text-lg font-semibold text-pink-700 mb-3 block">Elige tu Avatar Favorito</Label>
-              <div className="grid grid-cols-5 gap-3">
-                {avatars.map((avatar) => (
-                  <Button
-                    key={avatar}
-                    onClick={() => setTempProfile({ ...tempProfile, avatar })}
-                    className={`text-3xl p-4 rounded-xl border-2 transition-all ${
-                      tempProfile.avatar === avatar
-                        ? "border-pink-500 bg-pink-100 scale-110"
-                        : "border-gray-300 bg-white hover:bg-pink-50 hover:border-pink-300"
-                    }`}
-                  >
-                    {avatar}
-                  </Button>
-                ))}
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="price800" className="text-sm">
+                800 Robux (USD)
+              </Label>
+              <Input
+                id="price800"
+                type="number"
+                step="0.01"
+                value={price800}
+                onChange={(e) => setPrice800(e.target.value)}
+                className="h-10 sm:h-9"
+              />
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Language Settings */}
-        <Card className="bg-gradient-to-br from-blue-50 to-teal-50 shadow-xl border-4 border-blue-300">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-blue-600">
-              <Globe className="w-5 h-5" />
-              Idioma de los Bebés Llorones
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <RadioGroup
-              value={tempProfile.language}
-              onValueChange={(value: "es" | "en" | "both") => setTempProfile({ ...tempProfile, language: value })}
-              className="space-y-3"
-            >
-              <div className="flex items-center space-x-3 p-3 rounded-xl border-2 border-blue-200 hover:bg-blue-50">
-                <RadioGroupItem value="es" id="spanish" />
-                <Label htmlFor="spanish" className="text-lg font-semibold cursor-pointer flex items-center gap-2">
-                  🇪🇸 Solo Español - ¡Buaaa!
-                </Label>
-              </div>
-              <div className="flex items-center space-x-3 p-3 rounded-xl border-2 border-blue-200 hover:bg-blue-50">
-                <RadioGroupItem value="en" id="english" />
-                <Label htmlFor="english" className="text-lg font-semibold cursor-pointer flex items-center gap-2">
-                  🇺🇸 Solo Inglés - Waaah!
-                </Label>
-              </div>
-              <div className="flex items-center space-x-3 p-3 rounded-xl border-2 border-blue-200 hover:bg-blue-50">
-                <RadioGroupItem value="both" id="both" />
-                <Label htmlFor="both" className="text-lg font-semibold cursor-pointer flex items-center gap-2">
-                  🌍 Ambos Idiomas - ¡Buaaa & Waaah!
-                </Label>
-              </div>
-            </RadioGroup>
-          </CardContent>
-        </Card>
-
-        {/* Progress Display */}
-        <Card className="bg-gradient-to-r from-yellow-100 to-orange-100 shadow-xl border-4 border-yellow-300">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-orange-600">
-              <Heart className="w-5 h-5 fill-orange-600" />
-              Progreso del Bebé Llorón
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4 text-center">
-              <div className="bg-white/80 rounded-xl p-4 border-2 border-pink-200">
-                <div className="text-3xl mb-2">💕</div>
-                <div className="text-2xl font-bold text-pink-600">{profile.stars}</div>
-                <div className="text-sm text-gray-600">Corazones</div>
-              </div>
-              <div className="bg-white/80 rounded-xl p-4 border-2 border-purple-200">
-                <div className="text-3xl mb-2">🏆</div>
-                <div className="text-2xl font-bold text-purple-600">{profile.level}</div>
-                <div className="text-sm text-gray-600">Nivel</div>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="price1000" className="text-sm">
+                1000 Robux (USD)
+              </Label>
+              <Input
+                id="price1000"
+                type="number"
+                step="0.01"
+                value={price1000}
+                onChange={(e) => setPrice1000(e.target.value)}
+                className="h-10 sm:h-9"
+              />
             </div>
-            <div className="mt-4 text-center">
-              <p className="text-gray-600 text-sm">¡Sigue jugando para conseguir más corazones y subir de nivel!</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Favorite Babies */}
-        <Card className="bg-gradient-to-br from-purple-50 to-pink-50 shadow-xl border-4 border-purple-300">
-          <CardHeader>
-            <CardTitle className="text-purple-600 text-center">💕 Mis Bebés Llorones Favoritos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-3 bg-white/80 rounded-xl border-2 border-yellow-200">
-                <div className="relative w-12 h-12 mx-auto mb-2">
-                  <Image src="/images/bebe-abeja.png" alt="Bebé Abeja" fill className="object-contain" />
-                </div>
-                <p className="text-sm font-semibold text-yellow-700">Bebé Abeja</p>
-              </div>
-              <div className="text-center p-3 bg-white/80 rounded-xl border-2 border-green-200">
-                <div className="relative w-12 h-12 mx-auto mb-2">
-                  <Image src="/images/bebe-rana.png" alt="Bebé Rana" fill className="object-contain" />
-                </div>
-                <p className="text-sm font-semibold text-green-700">Bebé Rana</p>
-              </div>
-              <div className="text-center p-3 bg-white/80 rounded-xl border-2 border-pink-200">
-                <div className="relative w-12 h-12 mx-auto mb-2">
-                  <Image src="/images/bebe-conejo.png" alt="Bebé Conejo" fill className="object-contain" />
-                </div>
-                <p className="text-sm font-semibold text-pink-700">Bebé Conejo</p>
-              </div>
-              <div className="text-center p-3 bg-white/80 rounded-xl border-2 border-blue-200">
-                <div className="relative w-12 h-12 mx-auto mb-2">
-                  <Image src="/images/bebe-astronauta.png" alt="Bebé Astronauta" fill className="object-contain" />
-                </div>
-                <p className="text-sm font-semibold text-blue-700">Bebé Astronauta</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Save Button */}
-        <div className="text-center">
-          <Button
-            onClick={handleSave}
-            className="bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white font-bold py-4 px-8 rounded-2xl text-lg shadow-lg border-2 border-white"
-          >
-            <Save className="w-5 h-5 mr-2" />
-            Guardar Mi Perfil
+          </div>
+          <Button onClick={handleSavePrices} className="w-full sm:w-auto">
+            <Save className="h-4 w-4 mr-2" />
+            Guardar Precios
           </Button>
-          <p className="text-sm text-gray-600 mt-2">¡Buaaa! ¡Tu perfil se guardará con amor!</p>
         </div>
-      </div>
-    </div>
+
+        {/* Import Section */}
+        <div className="border-t pt-6 space-y-4">
+          <h3 className="font-medium text-sm text-muted-foreground">Importar Datos</h3>
+          <p className="text-xs text-muted-foreground">
+            Importa datos desde un archivo CSV exportado previamente o con el formato:
+            <br />
+            <code className="bg-muted px-1 rounded">COMPRAS: Tipo,Fecha,PrecioUSD,Cotización,CostoARS</code>
+            <br />
+            <code className="bg-muted px-1 rounded">VENTAS: Tipo,Fecha,Plataforma,Código,Precio,Comisión,Neto</code>
+          </p>
+
+          <div className="flex flex-col gap-2">
+            <input type="file" accept=".csv,.txt" onChange={handleFileUpload} id="file-upload" className="hidden" />
+            <Button asChild variant="outline" className="w-full sm:w-auto bg-transparent">
+              <label htmlFor="file-upload" className="cursor-pointer flex items-center justify-center gap-2">
+                <Upload className="h-4 w-4" />
+                Seleccionar Archivo CSV
+              </label>
+            </Button>
+          </div>
+
+          {importError && (
+            <div className="p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-900 rounded-lg">
+              <p className="text-sm text-red-700 dark:text-red-400">{importError}</p>
+            </div>
+          )}
+
+          {importSuccess && (
+            <div className="p-3 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-900 rounded-lg">
+              <p className="text-sm text-green-700 dark:text-green-400">Datos importados correctamente</p>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   )
 }
